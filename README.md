@@ -13,6 +13,17 @@
 
 **You are free to distribute, copy, or modify this software, with or without credit towards the author; however, the author bares no responsibility for any damages sustained while using this software. Also, the software is offered "as-is."**
 
+# Models used:
+- Stochastic Gradient Decent
+- Gaussian Naive Bayes
+- Multi-nomial Naive Bayes
+- K-Nearest Neighbor
+- Nearest Centroid
+- Random Forest
+- Logistic Regression
+- Logistic Regression CV
+- Decision Tree
+
 # Approach 
 
 Since neither dataset contain columns similar to one-another, I implemented an Extract, Transform, and Load (ETL) process.
