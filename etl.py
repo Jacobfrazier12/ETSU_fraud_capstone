@@ -62,7 +62,7 @@ def calculate_distance_from_home(row):
 
 
 def combine_data(ignore_files: list, path: str):
-    comm = "cd ./Sparkov_Data_Generation && python3 datagen.py -n 10000 -o ../credit_card_fraud 01-01-2020 03-05-2020"
+    comm = "cd ./Sparkov_Data_Generation && python3 datagen.py -n 15000 -o ../credit_card_fraud 01-01-2020 08-05-2020"
     subprocess.run(comm, shell=True)
     list_of_files = os.listdir(os.path.join(os.getcwd(), "credit_card_fraud"))
     with open(path, "w+") as fp:

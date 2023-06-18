@@ -31,20 +31,30 @@ Since neither dataset contain columns similar to one-another, I implemented an E
 After running the Sparkov tool, I extracted all the records, which were spread-out across multiple files, into a single-unified CSV file.
 
 I then began transforming the unified Sparkov data, so it would match the Kaggle dataset. Upon completion, the datasets conformed to the following schema:
-- distance from home
-- distance from last transaction
-- ratio to median purchase price
-- used chip 
-- used pin number
-- online order
-- repeat retailer
-- fraud
+   - distance from home:
+      To calculate distance from home, I used the Haversine formula, which calculates the distance between two positional-coordinates.
+   - distance from last transaction:
+      To calculate distance from last transaction, I took the difference between distance from home for the current and previous transactions.
+   - ratio to median purchase price:
+      To calculated ratio to median purchase price, I divided the purchase amount by the median purchase amount for that user. 
+   - used chip:
+      to populate the used chip field, I checked the purchase category and operated under assumption that all transactions, excluding online and petrol station transactions, were done using the EMV chips. While this assumption isn't always true, it was the best approach given the lack of available information to infer the value with absolute-certainty. 
+   - used pin number:
+      To populate the used pin number field, I defaulted the value to 0 because, while, PIN-based credit cards do exist, I couldn't find evidence that they were widely available. 
+   - online order:
+      To populate the online order field, I checked the purchase category to infer the value.
+   - repeat retailer:
+      To populate the repeat retailer field, I checked the previous transaction's merchant to infer the value.
+   - fraud:
+      This field was already populated.
 
-After examining the results, I realized that the machine learning models were failing because the data varied in size, so scaling was used to scale the data.
+Now that I had the fields populated, I Scaled the distance from home/last transaction fields. This was done because the values present in these fields had a a high value-range, which caused issues with the machine-learning models. I also needed to take a sample of non-fraudulent transactions so that there would be an equal amount of non-fraudulent and fraudulent transactions. This was done to ensure the models were not biased towards non-fraudulent transactions.
 
-The models also suffered from biases towards non-fraudulent transactions due to the imbalance between non-fraudulent and fraudulent, so a subset of non-fraudulent transactions was extracted and merged with the fraudulent transactions.
+# Results
+   The results varied because the training data was randomly generated. Because of this, if you run this, you likely won't achieve the same results.
 
-After training each model, I tested each model with the Kaggle dataset, which was unseen data. The results weren't always favorable because because the models were trained on randomly generated data.
+
+
 
 # Running the software
 1. Ensure you have Python 3, Pip 3, and GNU Make installed.
@@ -53,5 +63,33 @@ After training each model, I tested each model with the Kaggle dataset, which wa
 
 - `make init` will install all required dependencies, via Pip; clone the Sparkov tool; and download the Kaggle dataset from Google Drive.
 
+- `make run` will generate roughly half-a-gigabyte of data and train each model on said data. After each model is trained, it is tested against the second dataset. Two tests are performed: one against all non-fraudulent transactions and all fraudulent.
+
+# Results at a glance
+
+The results varied because the training data was randomly generated. Because of this, if you run this, you likely won't achieve the same results.
 
 
+1. Model: Multinomial Naive Bayes
+   all non-fraudulent: 91%
+   all fraudulent: 57%
+
+2. Model: K-nearest Neighbors 
+   all non-fraudulent: 74%
+   all fraudulent: 64%
+
+3. Model: Random Forest 
+   all non-fraudulent: 95%
+   all fraudulent: 54%
+
+4. Model: Logistic Regression 
+   all non-fraudulent: 89%
+   all fraudulent: 69%
+
+5. Model: Logistic Regression CV 
+   all non-fraudulent: 95%
+   all fraudulent: 74%
+
+6. Model: Neural Network
+   all non-fraudulent: 94%
+   all fraudulent: 66%

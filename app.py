@@ -39,17 +39,14 @@ if str.lower(training) == "y":
     y = data["fraud"].values
     data = data.drop(labels = ["fraud"], axis = 1)
     x = data.values
-    sgd = SGDClassifier()
-    gaussian_nb = GaussianNB()
     multinomial_nb = MultinomialNB()
     knn = KNeighborsClassifier()
-    nearest_centroid = NearestCentroid()
+   
     random_forest = RandomForestClassifier()
     logistic_regression = LogisticRegression()
     logistic_regression_cv = LogisticRegressionCV()
-    decision_tree = DecisionTreeClassifier()
-    neural_network =  classifier = MLPClassifier(hidden_layer_sizes = (500,500, 500), activation="tanh", random_state = 42, solver = "adam", max_iter=5000)
-    classifiers = ((sgd, "Stochastic Gradient Decent"), (gaussian_nb, "Gaussian Naive Bayes"), (multinomial_nb, "Multinomial Naive Bayes"), (knn, "K-Nearest Neighbor"), (nearest_centroid, "Nearest Centroid"), (random_forest, "Random Forest"), (logistic_regression, "Logistic Regression"),(logistic_regression_cv, "Logistic Regression CV"), (decision_tree, "Decision Tree"))
+    neural_network = MLPClassifier(hidden_layer_sizes = (100, 100, 100), activation="logistic", random_state = 42, solver = "lbfgs", max_iter=2000)
+    classifiers = ((multinomial_nb, "Multinomial Naive Bayes"), (knn, "K-Nearest Neighbor"), (random_forest, "Random Forest"), (logistic_regression, "Logistic Regression"),(logistic_regression_cv, "Logistic Regression CV"), (neural_network, "Neural Network"))
     x_train, x_test, y_train, y_true = train_test_split(x, y, test_size = 0.20, random_state=42)
     
     for classifier in classifiers:
