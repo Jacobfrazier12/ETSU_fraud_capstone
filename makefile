@@ -10,4 +10,4 @@ init:
 		-tar -xzvf data2.tar.gz data2.csv
 		-rm data2.tar.gz
 run:
-		time python3 etl.py && time python3 app.py "y" "n" && python3 app.py "n" "n"
+		time python3 etl.py && time python3 app.py

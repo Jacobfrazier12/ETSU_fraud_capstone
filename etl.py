@@ -6,21 +6,22 @@ import pandas as pd
 from sklearn.preprocessing import MinMaxScaler, LabelEncoder
 from sklearn.utils import resample
 import math
-keep_original_files = False
 cols = ["distance_from_home","distance_from_last_transaction","ratio_to_median_purchase_price","repeat_retailer","used_chip","used_pin_number","online_order","fraud"]
 scaler = MinMaxScaler()
-ignore_files = ["data.csv", "data2.csv", "demographic.csv", "card_transdata.csv", "original_data.csv"]
-files_not_to_delete = ["data.csv", "data2.csv", "demographic.csv", "original_data.csv"]
+#Guesstimates if the EMV chip was used
 def determine_if_chip(row):
     if "net" in str(row["category"]) and "gas" in str(row["category"]):
         return 0
     else: return 1
-def determine_if_repeat(row):
+
+#Checks if the current transactions ocurred at the same retailer as the previous one. 
+def determine_if_repeat_retailer(row):
     if row["merchant"] == 0:
         return 1
     else: 
         return 0
 
+#Guesstimates if the transaction was done online.
 def determine_if_online(row):
     if "net" in str(row["category"]):
         return 1
@@ -28,40 +29,26 @@ def determine_if_online(row):
         return 0
 
 
-
+#Applies the Haversine formula to calculate the distance between the merchant and the card holder's home address.
 def calculate_distance_from_home(row):
     
     R = 6371
-    #R = 3963 
 
     lat1, lon1 = (row["lat"], row["long"])
     lat2, lon2 = (row["merch_lat"], row["merch_long"])
-
-   
     lat1 = math.radians(lat1)
     lon1 = math.radians(lon1)
     lat2 = math.radians(lat2)
     lon2 = math.radians(lon2)
-
-   
     d_lon = lon2 - lon1 
-
-   
     d_lat = lat2 - lat1 
-
-   
     a = math.pow(math.sin(d_lat / 2), 2) + math.cos(lat1) * math.cos(lat2) * math.pow(math.sin(d_lon / 2), 2)
     c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
-    dist = R * c 
-
+    dist = R * c
     return dist
    
-
-
-
-
-
-def combine_data(ignore_files: list, path: str):
+#This function calls the Sparkov Generation Tool. Since the data is spread across multiple files, the data is combined into one file, data.csv 
+def combine_data(path: str):
     comm = "cd ./Sparkov_Data_Generation && python3 datagen.py -n 15000 -o ../credit_card_fraud 01-01-2020 08-05-2020"
     subprocess.run(comm, shell=True)
     list_of_files = os.listdir(os.path.join(os.getcwd(), "credit_card_fraud"))
@@ -86,11 +73,9 @@ def combine_data(ignore_files: list, path: str):
     rmtree(os.path.join(os.getcwd(), "credit_card_fraud"))              
               
                 
-    
-def clean_files(files_not_to_delete: list, data_path: str, demographic_path: str):
+#This function preforms the necessary steps to transform and save the data.    
+def clean_files(data_path: str, demographic_path: str):
 
-    
-    
      if os.path.exists(data_path):
         data = pd.read_csv(data_path, sep="|", low_memory=False)
         data = data.iloc[:, [9, 10, 14,16,19, *range(20,26)]]
@@ -122,7 +107,7 @@ def clean_files(files_not_to_delete: list, data_path: str, demographic_path: str
         label_encoder = LabelEncoder()
         data["merchant"] = label_encoder.fit_transform(data["merchant"])
         data["repeat_retailer"] = data.groupby("acct_num")["merchant"].diff().fillna(0).abs()
-        data["repeat_retailer"] =  data.apply(lambda row: determine_if_repeat(row), axis = 1 )
+        data["repeat_retailer"] =  data.apply(lambda row: determine_if_repeat_retailer(row), axis = 1 )
         print("Done determining if a purchase was a repeat-retailer. \n")
         print("Saving is_fraud to fraud. \n")
         data["fraud"] = data["is_fraud"]
@@ -148,8 +133,8 @@ data_path = os.path.join(os.getcwd(),"data.csv")
 data2_path = os.path.join(os.getcwd(),"data2.csv")
 demographic_path = os.path.join(os.getcwd(), "demographic.csv")
 cleaned_data_path = os.path.join(os.getcwd(), "cleaned_credit_card_data.csv")
-combine_data(ignore_files, data_path)
-clean_files(files_not_to_delete, data_path, demographic_path)
+combine_data(data_path)
+clean_files(data_path, demographic_path)
 
 
 
