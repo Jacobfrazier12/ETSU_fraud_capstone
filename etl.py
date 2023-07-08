@@ -14,7 +14,7 @@ def determine_if_chip(row):
         return 0
     else: return 1
 
-#Checks if the current transactions ocurred at the same retailer as the previous one. 
+#Checks if the current transactions occurred at the same retailer as the previous one. 
 def determine_if_repeat_retailer(row):
     if row["merchant"] == 0:
         return 1
