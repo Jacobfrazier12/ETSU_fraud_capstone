@@ -11,7 +11,7 @@
 
 # License
 
-**You are free to distribute, copy, or modify this software, with or without credit towards the author; however, the author bares no responsibility for any damages sustained while using this software. Also, the software is offered "as-is."**
+**You are free to distribute, copy, or modify this software, with or without credit towards the author; however, the author bares no responsibility for any damages sustained while using this software. Also, the software is offered "as is."**
 
 # Models used:
 - Stochastic Gradient Decent
@@ -28,11 +28,11 @@
 
 Since neither dataset contains columns similar to one another, I implemented an Extract, Transform, and Load (ETL) process.
 
-After running the Sparkov tool, I extracted all the records, which were spread out across multiple files, into a single-unified CSV file.
+After running the Sparkov tool, I extracted all the records, which were spread out across multiple files, into a single unified CSV file.
 
 I then began transforming the unified Sparkov data, so it would match the Kaggle dataset. Upon completion, the datasets conformed to the following schema:
    - distance from home:
-      To calculate distance from home, I used the Haversine formula, which calculates the distance between two positional-coordinates.
+      To calculate distance from home, I used the Haversine formula, which calculates the distance between two positional coordinates.
    - distance from last transaction:
       To calculate distance from last transaction, I took the difference between distance from home for the current and previous transactions.
    - ratio to median purchase price:
