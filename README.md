@@ -50,12 +50,6 @@ I then began transforming the unified Sparkov data, so it would match the Kaggle
 
 Now that I had the fields populated, I Scaled the distance from home/last transaction fields. This was done because the values present in these fields had a a high value-range, which caused issues with the machine-learning models. I also needed to take a sample of non-fraudulent transactions so that there would be an equal amount of non-fraudulent and fraudulent transactions. This was done to ensure the models were not biased towards non-fraudulent transactions.
 
-# Results
-   The results varied because the training data was randomly generated. Because of this, if you run this, you likely won't achieve the same results.
-
-
-
-
 # Running the software
 1. Ensure you have Python 3, Pip 3, and GNU Make installed.
 
