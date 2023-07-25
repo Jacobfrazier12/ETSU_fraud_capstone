@@ -119,11 +119,11 @@ def clean_files(data_path: str, demographic_path: str):
         data = data.dropna(axis=0)
         print("Done dropping null rows. \n")
         print(f"Saving and scaling data to {data_path}\n")
-        data[["distance_from_home", "distance_from_last_transaction",]] = scaler.fit_transform(data[["distance_from_home", "distance_from_last_transaction"]])
+        data[["distance_from_home", "distance_from_last_transaction", "ratio_to_median_purchase_price"]] = scaler.fit_transform(data[["distance_from_home", "distance_from_last_transaction", "ratio_to_median_purchase_price"]])
         data.to_csv(data_path, header=True, index=False, mode="w+", sep="|")
         data2 = pd.read_csv(data2_path)
         data2 = data2[cols]
-        data2[["distance_from_home", "distance_from_last_transaction"]] = scaler.fit_transform(data2[["distance_from_home", "distance_from_last_transaction"]])
+        data2[["distance_from_home", "distance_from_last_transaction", "ratio_to_median_purchase_price"]] = scaler.fit_transform(data2[["distance_from_home", "distance_from_last_transaction", "ratio_to_median_purchase_price"]])
         data2.to_csv(data2_path, header=True, index=False, mode="w+")
         print("Done saving. \n")
 

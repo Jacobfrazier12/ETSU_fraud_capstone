@@ -15,7 +15,7 @@ from sklearn.tree import DecisionTreeClassifier
 ##This section obtains a sample of non-fraudulent transactions, so there will be an equal number of non-fraudulent and fraudulent transactions. This sampled data is split into a training and testing set and used to train each model. 
 data2_path = os.path.join(os.getcwd(), "data2.csv")
 data_path = os.path.join(os.getcwd(), "data.csv")
-cols = ["distance_from_home","distance_from_last_transaction","ratio_to_median_purchase_price","repeat_retailer","used_chip","used_pin_number","online_order","fraud"]
+cols = ["distance_from_home", "distance_from_last_transaction", "ratio_to_median_purchase_price", "repeat_retailer", "used_chip", "used_pin_number", "online_order", "fraud"]
 data = pd.read_csv(data_path, sep="|")
 data = data[cols]
 data2 = pd.read_csv(data2_path)
@@ -30,9 +30,9 @@ x = data.values
 multinomial_nb = MultinomialNB()
 knn = KNeighborsClassifier()
 random_forest = RandomForestClassifier()
-logistic_regression = LogisticRegression()
-logistic_regression_cv = LogisticRegressionCV()
-neural_network = MLPClassifier(hidden_layer_sizes = (100, 100, 100), activation="logistic", random_state = 42, solver = "lbfgs", max_iter=2000)
+logistic_regression = LogisticRegression(random_state = 42)
+logistic_regression_cv = LogisticRegressionCV(random_state = 42)
+neural_network = MLPClassifier(activation="logistic", random_state = 42)
 classifiers = ((multinomial_nb, "Multinomial Naive Bayes"), (knn, "K-Nearest Neighbor"), (random_forest, "Random Forest"), (logistic_regression, "Logistic Regression"),(logistic_regression_cv, "Logistic Regression CV"), (neural_network, "Neural Network"))
 x_train, x_test, y_train, y_true = train_test_split(x, y, test_size = 0.20, random_state=42)
 ## 
