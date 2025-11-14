@@ -12,6 +12,9 @@ from sklearn.neural_network import MLPClassifier, MLPRegressor
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
 from sklearn.tree import DecisionTreeClassifier
 
+import warnings
+warnings.filterwarnings("ignore")
+
 ##This section obtains a sample of non-fraudulent transactions, so there will be an equal number of non-fraudulent and fraudulent transactions. This sampled data is split into a training and testing set and used to train each model. 
 data2_path = os.path.join(os.getcwd(), "data2.csv")
 data_path = os.path.join(os.getcwd(), "data.csv")
