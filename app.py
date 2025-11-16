@@ -37,7 +37,7 @@ logistic_regression = LogisticRegression(random_state = 42)
 logistic_regression_cv = LogisticRegressionCV(random_state = 42)
 neural_network = MLPClassifier(activation="logistic", random_state = 42)
 classifiers = ((multinomial_nb, "Multinomial Naive Bayes"), (knn, "K-Nearest Neighbor"), (random_forest, "Random Forest"), (logistic_regression, "Logistic Regression"),(logistic_regression_cv, "Logistic Regression CV"), (neural_network, "Neural Network"))
-x_train, x_test, y_train, y_true = train_test_split(x, y, test_size = 0.20, random_state=42)
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.20, random_state=42)
 ## 
 
 ## This section tests each model's ability to accurately label unseen data(i.e., the Kaggle dataset) and outputs each model's accuracy.
@@ -47,16 +47,16 @@ for classifier in classifiers:
     print(classifier[1], "\n")
     fraud_test_data = data2[data2["fraud"]==1]
     non_fraud_test_data = data2[data2["fraud"]==0]
-    y_true = non_fraud_test_data["fraud"].values
+    y_test = non_fraud_test_data["fraud"].values
     non_fraud_test_data = non_fraud_test_data.drop(["fraud"], axis=1)
     y_pred = model.predict(non_fraud_test_data.iloc[:, [0,1,2,3, 4,5, 6]].values)
     print("Testing with non-fraudulent transactions.")
-    print(round(accuracy_score(y_true, y_pred),2)*100)  
+    print(round(accuracy_score(y_test, y_pred),2)*100)  
     print("Testing with only fraudulent transactions.")
-    y_true = fraud_test_data["fraud"].values
+    y_test = fraud_test_data["fraud"].values
     fraud_test_data = fraud_test_data.drop(["fraud"], axis=1)
     y_pred = model.predict(fraud_test_data.iloc[:, [0,1,2,3, 4,5, 6]].values)
-    print(round(accuracy_score(y_true, y_pred),2)*100, "\n")
+    print(round(accuracy_score(y_test, y_pred),2)*100, "\n")
             
 
    

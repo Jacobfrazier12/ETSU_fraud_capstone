@@ -2,3 +2,4 @@
 /env
 /Sparkov_Data_Generation
 *.pkl
+*.gz
